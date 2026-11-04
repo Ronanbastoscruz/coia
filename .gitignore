@@ -1,0 +1,39 @@
+# ── Chaves e senhas: NUNCA vão para o Git ─────────────────────
+*firebase-adminsdk*.json
+firebase-admin.json
+coia-firebase-admin.json
+upload.js
+upload-*.js
+.env
+
+# ── Chave da IA (OpenAI / Claude / etc.) ─────────────────────
+coia-ia.json
+*-ia.json
+*.pem
+*.key
+
+# ── Arquivos que vão para a pasta privada do servidor ────────
+privado_servidor/
+
+# ── Fotos/arquivos enviados pelos usuários (ficam só no servidor)
+uploads/
+
+# ── Lixo do sistema / dependências ───────────────────────────
+node_modules/
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# ── Variáveis de ambiente (se um dia usar .env) ──────────────
+.env.*
+!.env.example
+
+# ── Gerados / temporários ────────────────────────────────────
+vendor/
+dist/
+build/
+*.log
+*.sqlite
+*.db
+.vscode/
+.idea/
