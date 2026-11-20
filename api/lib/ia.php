@@ -48,6 +48,8 @@ function coia_gerar_artigo($ia, array $pedido, array $cadastro) {
         . "Em temas de saúde, direito ou finanças: não prometa resultados, evite afirmações exageradas "
         . "e oriente a procurar um profissional. "
         . "Revise a ortografia, a concordância e a pontuação antes de responder. "
+        . "Não escreva rótulos como 'Hook:', 'Introdução:' ou 'CTA:' no texto; comece direto pelo primeiro parágrafo. "
+        . "Use 'apoio' ou 'acompanhamento' (nunca 'suporte técnico') ao falar de atendimento a pessoas. "
         . "Responda SOMENTE com um objeto JSON com as chaves: "
         . "\"titulo\" (até 60 caracteres), \"resumo\" (meta descrição de até 160 caracteres) e "
         . "\"corpo_html\" (o artigo em HTML simples usando apenas <p>, <h2>, <h3>, <ul>, <ol>, <li>, <strong>, <em>; sem <h1>, sem o título no corpo). "
