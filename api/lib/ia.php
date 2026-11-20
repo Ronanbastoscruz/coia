@@ -43,6 +43,11 @@ function coia_gerar_artigo($ia, array $pedido, array $cadastro) {
 
     $sistema = "Você é um redator profissional de blogs em português do Brasil, especialista em SEO. "
         . "Escreva artigos originais, úteis, sem inventar dados, preços ou estatísticas. "
+        . "NÃO afirme nada sobre a empresa que não esteja nos dados dela (não diga que é 'referência', 'líder', "
+        . "não descreva métodos, equipe, certificações ou serviços que não foram informados). "
+        . "Em temas de saúde, direito ou finanças: não prometa resultados, evite afirmações exageradas "
+        . "e oriente a procurar um profissional. "
+        . "Revise a ortografia, a concordância e a pontuação antes de responder. "
         . "Responda SOMENTE com um objeto JSON com as chaves: "
         . "\"titulo\" (até 60 caracteres), \"resumo\" (meta descrição de até 160 caracteres) e "
         . "\"corpo_html\" (o artigo em HTML simples usando apenas <p>, <h2>, <h3>, <ul>, <ol>, <li>, <strong>, <em>; sem <h1>, sem o título no corpo). "

@@ -33,7 +33,9 @@ function coia_html_limpo($html) {
 
 function coia_html_no(DOMNode $no) {
     if ($no instanceof DOMText) {
-        return htmlspecialchars($no->nodeValue, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        // Hífens "especiais" que a IA às vezes usa viram hífen comum (evita problemas ao colar no blog)
+        $txt = str_replace(["\u{2010}", "\u{2011}"], '-', $no->nodeValue);
+        return htmlspecialchars($txt, ENT_QUOTES | ENT_HTML5, 'UTF-8');
     }
     if (!($no instanceof DOMElement)) return ''; // comentários etc.
 
