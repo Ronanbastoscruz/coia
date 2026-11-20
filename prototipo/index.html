@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CoIA — protótipo</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+  :root { --lateral:#1e2235; --destaque:#6c5ce7; --fundo:#f4f5fa; }
+  body { background:var(--fundo); }
+  .lateral { width:250px; min-height:100vh; background:var(--lateral); color:#cfd3e6; position:fixed; top:0; left:0; z-index:1040; transition:transform .2s; }
+  .lateral .marca { font-weight:800; font-size:1.4rem; color:#fff; }
+  .lateral .marca span { color:var(--destaque); }
+  .lateral .usuario { background:rgba(255,255,255,.06); border-radius:12px; }
+  .lateral a.item { display:flex; gap:10px; align-items:center; color:#cfd3e6; padding:10px 14px; border-radius:10px; text-decoration:none; margin-bottom:4px; cursor:pointer; }
+  .lateral a.item:hover { background:rgba(255,255,255,.07); color:#fff; }
+  .lateral a.item.ativo { background:var(--destaque); color:#fff; }
+  .conteudo { margin-left:250px; padding:28px; }
+  .card { border:0; border-radius:14px; box-shadow:0 2px 10px rgba(30,34,53,.06); }
+  .btn-primary { background:var(--destaque); border-color:var(--destaque); }
+  .btn-primary:hover { background:#5a4bd6; border-color:#5a4bd6; }
+  .tela { display:none; } .tela.ativa { display:block; }
+  .editor-barra .btn { border-radius:6px; }
+  .editor-area { min-height:320px; border:1px solid #dee2e6; border-top:0; border-radius:0 0 8px 8px; padding:16px; background:#fff; }
+  .editor-area:focus { outline:2px solid #c9c3fa; }
+  .tag { background:#eeebff; color:#4b3fc4; border-radius:999px; padding:3px 10px; font-size:.8rem; }
+  .entrada { min-height:100vh; display:flex; align-items:center; justify-content:center; }
+  .demo-aviso { position:fixed; bottom:12px; right:12px; z-index:2000; font-size:.75rem; }
+  @media (max-width: 991px) {
+    .lateral { transform:translateX(-100%); } .lateral.aberta { transform:none; }
+    .conteudo { margin-left:0; padding:16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== TELA 1: ENTRADA (SSO) ===== -->
+<div id="t-entrada" class="tela">
+  <div class="entrada">
+    <div class="card p-5 text-center" style="max-width:420px">
+      <div class="fs-2 fw-bold mb-2">Co<span style="color:var(--destaque)">IA</span></div>
+      <div class="spinner-border text-secondary my-3" role="status"></div>
+      <p class="mb-1">Entrando no CoIA...</p>
+      <hr>
+      <p class="text-muted small mb-2">Se der erro, aparece assim:</p>
+      <div class="alert alert-warning small mb-2">Acesso só pelo painel M3R.</div>
+      <a class="btn btn-outline-secondary btn-sm" onclick="mostrar('gerar')">Voltar ao painel M3R</a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MENU LATERAL ===== -->
+<nav class="lateral p-3" id="lateral">
+  <div class="marca mb-4 px-2">Co<span>IA</span></div>
+  <div class="usuario p-3 mb-4">
+    <div class="fw-semibold text-white">Padaria Pão Quente</div>
+    <div class="small">Editor chefe</div>
+  </div>
+  <a class="item" data-tela="gerar"><i class="bi bi-stars"></i> Gerar artigo</a>
+  <a class="item" data-tela="historico"><i class="bi bi-journal-text"></i> Meus artigos</a>
+  <a class="item" data-tela="cadastro"><i class="bi bi-building"></i> Cadastro</a>
+  <hr class="border-secondary">
+  <a class="item" data-tela="entrada"><i class="bi bi-box-arrow-left"></i> Sair</a>
+</nav>
+
+<main class="conteudo" id="conteudo">
+  <button class="btn btn-outline-secondary d-lg-none mb-3" onclick="document.getElementById('lateral').classList.toggle('aberta')"><i class="bi bi-list"></i> Menu</button>
+
+  <!-- ===== TELA 2: CADASTRO ===== -->
+  <section id="t-cadastro" class="tela">
+    <h3 class="mb-1">Cadastro da empresa</h3>
+    <p class="text-muted">Esses dados ajudam a IA a escrever com a cara da sua empresa.</p>
+    <div class="card p-4" style="max-width:720px">
+      <div class="row g-3">
+        <div class="col-md-6"><label class="form-label">Nome da empresa *</label><input class="form-control" value="Padaria Pão Quente"><div class="form-text">Aparece como autor dos artigos.</div></div>
+        <div class="col-md-6"><label class="form-label">Site</label><input class="form-control" value="www.paoquente.com.br"></div>
+        <div class="col-md-6"><label class="form-label">Ramo / segmento *</label><input class="form-control" value="Padaria e confeitaria"></div>
+        <div class="col-md-6"><label class="form-label">Cidade</label><input class="form-control" value="Belo Horizonte - MG"></div>
+        <div class="col-12"><label class="form-label">Público-alvo</label><input class="form-control" value="Famílias do bairro e pessoas que tomam café da manhã fora"></div>
+        <div class="col-md-6"><label class="form-label">Tom de voz</label>
+          <select class="form-select"><option>Profissional</option><option selected>Amigável</option><option>Descontraído</option><option>Técnico</option></select></div>
+      </div>
+      <div class="mt-4"><button class="btn btn-primary" onclick="aviso('Cadastro salvo.','success')"><i class="bi bi-check2"></i> Salvar cadastro</button></div>
+    </div>
+  </section>
+
+  <!-- ===== TELA 3: GERAR ===== -->
+  <section id="t-gerar" class="tela">
+    <h3 class="mb-1">Gerar artigo</h3>
+    <p class="text-muted">Diga o tema e a IA escreve um rascunho para você revisar.</p>
+    <div class="card p-4" style="max-width:720px">
+      <div class="mb-3"><label class="form-label">Tema do artigo *</label>
+        <input class="form-control" id="tema" placeholder="Ex.: 5 dicas para conservar o pão francês por mais tempo"></div>
+      <div class="mb-3"><label class="form-label">Palavras-chave <span class="text-muted small">(até 5, separadas por vírgula)</span></label>
+        <input class="form-control" placeholder="pão francês, conservar pão, padaria"></div>
+      <div class="mb-3"><label class="form-label d-block">Tamanho</label>
+        <div class="btn-group" role="group">
+          <input type="radio" class="btn-check" name="tam" id="t1"><label class="btn btn-outline-secondary" for="t1">Curto (~500)</label>
+          <input type="radio" class="btn-check" name="tam" id="t2" checked><label class="btn btn-outline-secondary" for="t2">Médio (~900)</label>
+          <input type="radio" class="btn-check" name="tam" id="t3"><label class="btn btn-outline-secondary" for="t3">Longo (~1500)</label>
+        </div></div>
+      <div class="mb-3"><label class="form-label d-block">IA</label>
+        <div class="btn-group" role="group">
+          <input type="radio" class="btn-check" name="ia" id="ia1" checked><label class="btn btn-outline-secondary" for="ia1">OpenAI</label>
+          <input type="radio" class="btn-check" name="ia" id="ia2"><label class="btn btn-outline-secondary" for="ia2">Grok</label>
+        </div></div>
+      <div class="mb-4"><label class="form-label">Observações <span class="text-muted small">(opcional)</span></label>
+        <textarea class="form-control" rows="2" placeholder="Ex.: terminar convidando para conhecer a loja"></textarea></div>
+      <div class="d-flex flex-wrap align-items-center gap-3">
+        <button class="btn btn-primary btn-lg" id="btnGerar" onclick="gerar()"><i class="bi bi-stars"></i> Gerar artigo com IA</button>
+        <span class="text-muted small">Hoje você usou <b>2 de 5</b> gerações.</span>
+      </div>
+      <div id="gerando" class="alert alert-info mt-3 d-none"><span class="spinner-border spinner-border-sm me-2"></span>Escrevendo seu artigo... isso leva até 1 minuto. Não feche esta página.</div>
+    </div>
+  </section>
+
+  <!-- ===== TELA 4: REVISAR ===== -->
+  <section id="t-revisar" class="tela">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+      <div><h3 class="mb-0">Revisar artigo</h3><span class="badge text-bg-secondary">Rascunho</span> <span class="small text-muted">gerado com OpenAI · hoje 14:32</span></div>
+      <div class="d-flex flex-wrap gap-2">
+        <button class="btn btn-outline-secondary" onclick="if(confirm('O texto atual será substituído. Continuar?')) gerar()"><i class="bi bi-arrow-repeat"></i> Gerar de novo</button>
+        <button class="btn btn-primary" onclick="aviso('Artigo salvo.','success')"><i class="bi bi-check2"></i> Salvar</button>
+      </div>
+    </div>
+    <div class="row g-3">
+      <div class="col-lg-8">
+        <div class="card p-4">
+          <label class="form-label">Título <span class="text-muted small float-end">48/60</span></label>
+          <input class="form-control form-control-lg mb-3" value="5 dicas para o pão francês durar mais tempo">
+          <label class="form-label">Resumo <span class="text-muted small float-end">121/160</span></label>
+          <textarea class="form-control mb-3" rows="2">Aprenda como guardar o pão francês do jeito certo para ele continuar crocante e gostoso por mais tempo.</textarea>
+          <label class="form-label">Texto</label>
+          <div class="editor-barra btn-toolbar border rounded-top p-2 bg-light gap-1">
+            <button class="btn btn-sm btn-light"><i class="bi bi-type-bold"></i></button>
+            <button class="btn btn-sm btn-light"><i class="bi bi-type-italic"></i></button>
+            <button class="btn btn-sm btn-light"><i class="bi bi-type-h2"></i></button>
+            <button class="btn btn-sm btn-light"><i class="bi bi-list-ul"></i></button>
+            <button class="btn btn-sm btn-light"><i class="bi bi-link-45deg"></i></button>
+          </div>
+          <div class="editor-area" contenteditable="true">
+            <p>Quem não gosta de um pão francês quentinho? O problema é que, poucas horas depois, ele perde a crocância. Veja como evitar isso.</p>
+            <h2>1. Guarde em saco de papel</h2>
+            <p>O saco de papel deixa o pão "respirar" e evita que a casca fique murcha...</p>
+            <h2>2. Congele o que não for comer no dia</h2>
+            <p>Congelado, o pão dura até 30 dias. Para servir, leve ao forno por 5 minutos...</p>
+            <p><em>Gostou das dicas? Venha experimentar o pão saindo do forno na Padaria Pão Quente!</em></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="card p-4 mb-3">
+          <h6>Usar o artigo</h6>
+          <p class="small text-muted">Copie e cole no seu blog ou baixe o arquivo.</p>
+          <div class="d-grid gap-2">
+            <button class="btn btn-outline-primary" onclick="aviso('HTML copiado!','success')"><i class="bi bi-code-slash"></i> Copiar HTML</button>
+            <button class="btn btn-outline-primary" onclick="aviso('Texto copiado!','success')"><i class="bi bi-clipboard"></i> Copiar texto</button>
+            <button class="btn btn-outline-secondary" onclick="aviso('Download iniciado.','success')"><i class="bi bi-download"></i> Baixar (.html)</button>
+          </div>
+        </div>
+        <div class="card p-4">
+          <h6>Detalhes</h6>
+          <div class="small text-muted mb-2">Autor: <b>Padaria Pão Quente</b></div>
+          <div class="small text-muted mb-1">Palavras-chave:</div>
+          <div class="d-flex flex-wrap gap-1"><span class="tag">pão francês</span><span class="tag">conservar pão</span><span class="tag">padaria</span></div>
+          <div class="small text-muted mt-2">~880 palavras</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TELA 5: MEUS ARTIGOS ===== -->
+  <section id="t-historico" class="tela">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+      <h3 class="mb-0">Meus artigos</h3>
+      <input class="form-control" style="max-width:280px" placeholder="Buscar por título...">
+    </div>
+    <div class="card">
+      <div class="table-responsive">
+        <table class="table align-middle mb-0">
+          <thead class="table-light"><tr><th>Data</th><th>Título</th><th>IA</th><th>Status</th><th class="text-end">Ações</th></tr></thead>
+          <tbody>
+            <tr><td>20/11/2026</td><td>5 dicas para o pão francês durar mais tempo</td><td>OpenAI</td><td><span class="badge text-bg-secondary">Rascunho</span></td>
+              <td class="text-end text-nowrap"><button class="btn btn-sm btn-outline-primary" onclick="mostrar('revisar')">Abrir</button> <button class="btn btn-sm btn-outline-danger" onclick="confirm('Excluir este artigo?')"><i class="bi bi-trash"></i></button></td></tr>
+            <tr><td>18/11/2026</td><td>Bolo de aniversário: como escolher o sabor ideal</td><td>Grok</td><td><span class="badge text-bg-success">Pronto</span></td>
+              <td class="text-end text-nowrap"><button class="btn btn-sm btn-outline-primary" onclick="mostrar('revisar')">Abrir</button> <button class="btn btn-sm btn-outline-danger" onclick="confirm('Excluir este artigo?')"><i class="bi bi-trash"></i></button></td></tr>
+            <tr><td>12/11/2026</td><td>Café da manhã completo: o que não pode faltar</td><td>OpenAI</td><td><span class="badge text-bg-success">Pronto</span></td>
+              <td class="text-end text-nowrap"><button class="btn btn-sm btn-outline-primary" onclick="mostrar('revisar')">Abrir</button> <button class="btn btn-sm btn-outline-danger" onclick="confirm('Excluir este artigo?')"><i class="bi bi-trash"></i></button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="alertas" class="position-fixed top-0 end-0 p-3" style="z-index:3000"></div>
+<span class="badge text-bg-dark demo-aviso">Protótipo — dados de exemplo</span>
+
+<script>
+  function mostrar(nome) {
+    document.querySelectorAll('.tela').forEach(t => t.classList.remove('ativa'));
+    document.getElementById('t-' + nome).classList.add('ativa');
+    const fora = nome === 'entrada';
+    document.getElementById('lateral').style.display = fora ? 'none' : '';
+    document.getElementById('conteudo').style.display = fora ? 'none' : '';
+    document.querySelectorAll('.lateral a.item').forEach(a => a.classList.toggle('ativo', a.dataset.tela === nome || (nome === 'revisar' && a.dataset.tela === 'historico')));
+    document.getElementById('lateral').classList.remove('aberta');
+    location.hash = nome;
+  }
+  document.querySelectorAll('.lateral a.item').forEach(a => a.onclick = () => mostrar(a.dataset.tela));
+  function aviso(txt, tipo) {
+    const d = document.createElement('div');
+    d.className = 'alert alert-' + tipo + ' shadow-sm'; d.textContent = txt;
+    document.getElementById('alertas').appendChild(d); setTimeout(() => d.remove(), 2500);
+  }
+  function gerar() {
+    if (location.hash === '#gerar' && !document.getElementById('tema').value.trim()) { aviso('Preencha o tema do artigo.', 'warning'); return; }
+    const b = document.getElementById('btnGerar'); b.disabled = true;
+    document.getElementById('gerando').classList.remove('d-none'); mostrar('gerar');
+    setTimeout(() => { b.disabled = false; document.getElementById('gerando').classList.add('d-none'); mostrar('revisar'); aviso('Artigo gerado! Revise antes de usar.', 'success'); }, 1800);
+  }
+  mostrar((location.hash || '#gerar').slice(1));
+  window.addEventListener('hashchange', () => { const n = location.hash.slice(1); if (document.getElementById('t-' + n)) mostrar(n); });
+</script>
+</body>
+</html>

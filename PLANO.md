@@ -132,9 +132,12 @@ O Grok usa o mesmo formato de chamada da OpenAI. Por isso o `ia.php` usa uma ún
 - **Firebase**: projeto novo.
 - **Arquivos no EasyPage**: autorizado criar o que precisar, quando chegar a hora dos conectores.
 
-## Perguntas que ainda faltam
-1. **Limite de gerações por dia** para cada cliente. Sugestão: 10.
-2. **Quem cria as chaves** da OpenAI e do Grok, e **qual modelo** de cada uma? A sugestão é um modelo rápido e barato. Fica configurável no `coia-ia.json`.
-3. **projeto_id / tenant_id do CoIA no portal M3R**: precisa cadastrar o CoIA como projeto na API M3R (`/api/sso/`). Quem tem acesso a esse cadastro?
-4. **Firebase novo**: você cria o projeto e me manda o arquivo `firebase-adminsdk` (que vira `coia-firebase-admin.json`)?
-5. **Campos do cadastro do cliente**: os da tela 2 bastam (nome, site, ramo, cidade, público, tom)? Quer mais algum, por exemplo telefone ou endereço para citar nos artigos?
+- **Limite**: 5 gerações por dia por cliente (`limite_dia_empresa: 5`).
+- **Chaves da IA**: o Ronan cria (OpenAI e Grok), depois de aprovar o visual.
+- **Firebase**: o Ronan cria o projeto novo (com ajuda do Claude no Chrome, se precisar).
+- **Cadastro do cliente**: só os campos da tela 2.
+- **API M3R / SSO**: fica para mais tarde. Até lá, o login de teste é decidido na hora de começar o código.
+
+## Protótipo visual
+- Arquivo: `prototipo/index.html`. Só tem dados de exemplo, não tem lógica e **não sobe para o site** (está bloqueado no `upload.js`).
+- Serve para aprovar o visual antes do código de verdade.
