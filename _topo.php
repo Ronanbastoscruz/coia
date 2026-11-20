@@ -23,7 +23,7 @@ $__menu = [
     <title><?= h($titulo ?? 'CoIA') ?> — CoIA</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link href="assets/coia.css?v=20261120a" rel="stylesheet">
+    <link href="assets/coia.css?v=20261120b" rel="stylesheet">
 </head>
 <body>
 <nav class="lateral p-3" id="lateral">
