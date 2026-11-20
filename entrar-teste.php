@@ -1,6 +1,6 @@
 <?php
 /**
- * teste.php — ENTRADA DE TESTE, enquanto o CoIA não está ligado ao SSO da API M3R.
+ * entrar-teste.php — ENTRADA DE TESTE, enquanto o CoIA não está ligado ao SSO da API M3R.
  * Só funciona se existir privado/coia_teste.json:
  *   { "chave": "texto longo e secreto", "email": "...", "nome": "...", "cnpj": "...", "empresa": "..." }
  * Para DESLIGAR: apague privado/coia_teste.json do servidor (e este arquivo, quando o SSO estiver pronto).
