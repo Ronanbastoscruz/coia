@@ -37,3 +37,6 @@ build/
 *.db
 .vscode/
 .idea/
+
+# -- Configurações locais do Claude --
+.claude/

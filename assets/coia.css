@@ -1,0 +1,38 @@
+/* assets/coia.css — visual do CoIA (aprovado no protótipo) */
+:root { --lateral:#1e2235; --destaque:#6c5ce7; --fundo:#f4f5fa; }
+body { background:var(--fundo); }
+.cor-destaque { color:var(--destaque); }
+
+.lateral { width:250px; min-height:100vh; background:var(--lateral); color:#cfd3e6; position:fixed; top:0; left:0; z-index:1040; transition:transform .2s; overflow-y:auto; }
+.lateral .marca { font-weight:800; font-size:1.4rem; color:#fff; }
+.lateral .marca span { color:var(--destaque); }
+.lateral .usuario { background:rgba(255,255,255,.06); border-radius:12px; }
+.lateral a.item { display:flex; gap:10px; align-items:center; color:#cfd3e6; padding:10px 14px; border-radius:10px; text-decoration:none; margin-bottom:4px; }
+.lateral a.item:hover { background:rgba(255,255,255,.07); color:#fff; }
+.lateral a.item.ativo { background:var(--destaque); color:#fff; }
+.conteudo { margin-left:250px; padding:28px; }
+
+.card { border:0; border-radius:14px; box-shadow:0 2px 10px rgba(30,34,53,.06); }
+.btn-primary { background:var(--destaque); border-color:var(--destaque); }
+.btn-primary:hover, .btn-primary:focus, .btn-primary:disabled { background:#5a4bd6; border-color:#5a4bd6; }
+.btn-outline-primary { color:var(--destaque); border-color:var(--destaque); }
+.btn-outline-primary:hover { background:var(--destaque); border-color:var(--destaque); color:#fff; }
+
+.editor-barra .btn { border-radius:6px; }
+.editor-area { min-height:320px; border:1px solid #dee2e6; border-top:0; border-radius:0 0 8px 8px; padding:16px; background:#fff; }
+.editor-area:focus { outline:2px solid #c9c3fa; }
+.editor-area h2 { font-size:1.5rem; margin-top:1rem; }
+.editor-area h3 { font-size:1.2rem; margin-top:.8rem; }
+.tag { background:#eeebff; color:#4b3fc4; border-radius:999px; padding:3px 10px; font-size:.8rem; }
+
+.entrada { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:16px; }
+
+/* Caixas do m3r-alerts.js */
+.m3r-alert-overlay { position:fixed; inset:0; background:rgba(15,18,30,.45); display:flex; align-items:center; justify-content:center; z-index:3000; padding:16px; }
+.m3r-alert-box { background:#fff; border-radius:14px; padding:24px; max-width:420px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,.2); }
+
+@media (max-width: 991px) {
+  .lateral { transform:translateX(-100%); }
+  .lateral.aberta { transform:none; }
+  .conteudo { margin-left:0; padding:16px; }
+}
