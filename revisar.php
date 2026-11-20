@@ -7,7 +7,7 @@ if (!$art) {
     header('Location: historico.php');
     exit;
 }
-$nomesIa = ['openai' => 'OpenAI', 'grok' => 'Grok'];
+$nomesIa = ['openai' => 'OpenAI', 'groq' => 'Groq'];
 $pronto = ($art['status'] ?? '') === 'pronto';
 $quando = !empty($art['atualizado_em']) ? date('d/m/Y H:i', strtotime($art['atualizado_em'])) : '';
 

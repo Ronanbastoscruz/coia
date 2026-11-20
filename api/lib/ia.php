@@ -1,21 +1,21 @@
 <?php
 /**
- * api/lib/ia.php — conversa com a IA (OpenAI ou Grok). SÓ o PHP usa as chaves.
+ * api/lib/ia.php — conversa com a IA (OpenAI ou Groq). SÓ o PHP usa as chaves.
  *
  * privado/coia-ia.json:
  * {
  *   "padrao": "openai",
  *   "openai": { "chave": "sk-...",  "modelo": "gpt-4o-mini" },
- *   "grok":   { "chave": "xai-...", "modelo": "grok-3-mini" },
+ *   "groq":   { "chave": "gsk_...", "modelo": "llama-3.3-70b-versatile" },
  *   "limite_dia_empresa": 5,
  *   "max_tokens": 4000
  * }
- * O Grok usa o mesmo formato da OpenAI; só mudam o endereço, a chave e o modelo.
+ * O Groq usa o mesmo formato da OpenAI; só mudam o endereço, a chave e o modelo.
  */
 
 const COIA_IA_URL = [
     'openai' => 'https://api.openai.com/v1/chat/completions',
-    'grok'   => 'https://api.x.ai/v1/chat/completions',
+    'groq'   => 'https://api.groq.com/openai/v1/chat/completions',
 ];
 
 const COIA_TAMANHOS = ['curto' => 500, 'medio' => 900, 'longo' => 1500];
@@ -76,7 +76,7 @@ function coia_gerar_artigo($ia, array $pedido, array $cadastro) {
         ],
         'response_format' => ['type' => 'json_object'],
     ];
-    // OpenAI (modelos novos) usa max_completion_tokens; o Grok usa max_tokens
+    // OpenAI (modelos novos) usa max_completion_tokens; o Groq usa max_tokens
     $corpo[$ia === 'openai' ? 'max_completion_tokens' : 'max_tokens'] = $maxTokens;
 
     @set_time_limit(120);

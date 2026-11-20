@@ -9,7 +9,7 @@ if (!coia_cadastro()) {
 }
 
 $ias = coia_ias_disponiveis();
-$nomesIa = ['openai' => 'OpenAI', 'grok' => 'Grok'];
+$nomesIa = ['openai' => 'OpenAI', 'groq' => 'Groq'];
 $limite = coia_limite_dia();
 $usadas = coia_usadas_hoje();
 $esgotado = $usadas >= $limite;

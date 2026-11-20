@@ -8,7 +8,7 @@ $busca = coia_texto($_GET['q'] ?? '', 100);
 if ($busca !== '') {
     $artigos = array_values(array_filter($artigos, fn($a) => mb_stripos($a['titulo'] ?? '', $busca) !== false));
 }
-$nomesIa = ['openai' => 'OpenAI', 'grok' => 'Grok'];
+$nomesIa = ['openai' => 'OpenAI', 'groq' => 'Groq'];
 
 $titulo = 'Meus artigos';
 $pagina = 'artigos';

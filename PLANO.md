@@ -5,7 +5,7 @@
 - **Uma conta por cliente**: cada cliente entra com a própria conta e gera os próprios artigos. Ele é o supergerente (nível 1, título **"Editor chefe"**) da empresa dele.
 - O acesso é **só pelo SSO** da API M3R (`index.php?ticket=`), com `session_name('COIA_SESS')` em todo arquivo PHP.
 - O fluxo é: **cadastro do cliente** (dados da empresa) → **gerar artigo com IA** → **revisar e editar** → artigo salvo, depois copiado ou baixado.
-- **Duas IAs**: OpenAI e Grok (xAI). Quem chama a IA é sempre o PHP, com as chaves em `privado/coia-ia.json`.
+- **Duas IAs**: OpenAI e Groq. Quem chama a IA é sempre o PHP, com as chaves em `privado/coia-ia.json`.
 - O **autor** do artigo é o nome do cliente que está no cadastro.
 - **Firebase: projeto novo**, só do CoIA (`privado/coia-firebase-admin.json`). O navegador não acessa o Firestore direto: tudo passa pelo PHP.
 - Tudo é gravado e filtrado por `empresa_cnpj`, que vem sempre da sessão.
@@ -17,7 +17,7 @@
    - Campos: Nome da empresa (aparece como autor dos artigos), Site, Ramo/segmento, Cidade, Público-alvo e Tom de voz (Profissional/Amigável/Descontraído/Técnico).
    - Botão: **[Salvar cadastro]**. Esses dados entram no pedido à IA para o texto sair com a cara do cliente.
 3. **Gerar artigo** (`gerar.php`):
-   - Campos: Tema (obrigatório), Palavras-chave (até 5), Tamanho (Curto ~500 / Médio ~900 / Longo ~1500), IA (OpenAI / Grok) e Observações.
+   - Campos: Tema (obrigatório), Palavras-chave (até 5), Tamanho (Curto ~500 / Médio ~900 / Longo ~1500), IA (OpenAI / Groq) e Observações.
    - Rodapé: "Hoje você usou X de Y gerações."
    - Botão: **[Gerar artigo com IA]**
 4. **Revisar** (`revisar.php?id=`): Título (até 60 caracteres), Resumo (até 160) e o corpo num editor simples (negrito, subtítulo, lista, link).
@@ -50,7 +50,7 @@ coia/
   api/salvar.php         confere o dono (CNPJ) e salva
   api/excluir.php        confere o dono e exclui
   api/lib/firebase_admin.php  cópia ajustada do agendador (chave coia-firebase-admin.json)
-  api/lib/ia.php         escolhe OpenAI ou Grok, lê coia-ia.json, prompt fixo, max_tokens
+  api/lib/ia.php         escolhe OpenAI ou Groq, lê coia-ia.json, prompt fixo, max_tokens
   api/lib/html_limpo.php lista branca de tags HTML
   api/lib/consumo.php    limite diário + trava de 30s (coleção coia_consumo)
   api/lib/seguranca.php  CSRF, cabeçalhos, artigo_do_dono($id)
@@ -59,7 +59,7 @@ coia/
 
 servidor /privado/ (fora do site, nunca no Git):
   coia-firebase-admin.json   chave do Firebase NOVO do CoIA
-  coia-ia.json               chaves OpenAI + Grok, modelo de cada uma, limite por dia
+  coia-ia.json               chaves OpenAI + Groq, modelo de cada uma, limite por dia
   coia_sso_permitidos.json   projeto_id / tenant_id do CoIA no portal M3R
 ```
 
@@ -73,12 +73,12 @@ servidor /privado/ (fora do site, nunca no Git):
 {
   "padrao": "openai",
   "openai": { "chave": "...", "modelo": "..." },
-  "grok":   { "chave": "...", "modelo": "...", "url": "https://api.x.ai/v1/chat/completions" },
+  "groq":   { "chave": "...", "modelo": "...", "url": "https://api.groq.com/openai/v1/chat/completions" },
   "limite_dia_empresa": 10,
   "max_tokens": 4000
 }
 ```
-O Grok usa o mesmo formato de chamada da OpenAI. Por isso o `ia.php` usa uma única função para as duas, mudando só o endereço, a chave e o modelo.
+O Groq usa o mesmo formato de chamada da OpenAI. Por isso o `ia.php` usa uma única função para as duas, mudando só o endereço, a chave e o modelo.
 
 ## Cuidados de segurança
 1. Todo PHP começa com `session_name('COIA_SESS'); session_start();`. O `token.php` do agendador **não** faz isso, então ele não pode ser copiado como está. Na v1 nem é preciso, porque o navegador não acessa o Firestore.
@@ -105,7 +105,7 @@ O Grok usa o mesmo formato de chamada da OpenAI. Por isso o `ia.php` usa uma ún
 | 2 | Login SSO (index.php + _sessao.php) | 3 |
 | 3 | firebase_admin no projeto novo + teste de gravar/ler | 2 |
 | 4 | Cadastro do cliente (tela + api) | 3 |
-| 5 | ia.php com OpenAI e Grok + prompt + teste de tempo | 5 |
+| 5 | ia.php com OpenAI e Groq + prompt + teste de tempo | 5 |
 | 6 | html_limpo.php + testes com HTML ruim | 2 |
 | 7 | consumo.php (limite e trava) | 2 |
 | 8 | gerar.php + api/gerar.php | 4 |
@@ -125,7 +125,7 @@ O Grok usa o mesmo formato de chamada da OpenAI. Por isso o `ia.php` usa uma ún
 - Teto de custo mensal.
 
 ## O que você já respondeu
-- **IA**: OpenAI e Grok.
+- **IA**: OpenAI e Groq.
 - **Contas**: 1 para 1, cada cliente tem a própria conta.
 - **EasyPage e integração**: ficam para depois.
 - **Autor**: o nome do cliente no cadastro.
@@ -133,7 +133,7 @@ O Grok usa o mesmo formato de chamada da OpenAI. Por isso o `ia.php` usa uma ún
 - **Arquivos no EasyPage**: autorizado criar o que precisar, quando chegar a hora dos conectores.
 
 - **Limite**: 5 gerações por dia por cliente (`limite_dia_empresa: 5`).
-- **Chaves da IA**: o Ronan cria (OpenAI e Grok), depois de aprovar o visual.
+- **Chaves da IA**: o Ronan cria (OpenAI e Groq), depois de aprovar o visual.
 - **Firebase**: projeto `coia-13e2d` ("Coia"), Firestore em southamerica-east1, regras fechando todo acesso pelo navegador (só o PHP acessa). A chave fica na pasta `coia` (fora do Git) e o `upload.js` leva para `privado/coia-firebase-admin.json`.
 - **Cadastro do cliente**: só os campos da tela 2.
 - **API M3R / SSO**: fica para mais tarde. Até lá, o login de teste é decidido na hora de começar o código.
