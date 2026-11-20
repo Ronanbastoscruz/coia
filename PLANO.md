@@ -134,7 +134,7 @@ O Grok usa o mesmo formato de chamada da OpenAI. Por isso o `ia.php` usa uma ún
 
 - **Limite**: 5 gerações por dia por cliente (`limite_dia_empresa: 5`).
 - **Chaves da IA**: o Ronan cria (OpenAI e Grok), depois de aprovar o visual.
-- **Firebase**: o Ronan cria o projeto novo (com ajuda do Claude no Chrome, se precisar).
+- **Firebase**: projeto `coia-13e2d` ("Coia"), Firestore em southamerica-east1, regras fechando todo acesso pelo navegador (só o PHP acessa). A chave fica na pasta `coia` (fora do Git) e o `upload.js` leva para `privado/coia-firebase-admin.json`.
 - **Cadastro do cliente**: só os campos da tela 2.
 - **API M3R / SSO**: fica para mais tarde. Até lá, o login de teste é decidido na hora de começar o código.
 
